@@ -20,13 +20,13 @@
     }
 
     const readyPlantings = getReadyPlantings(state);
-    const selectedPlanting = readyPlantings.find(function (planting) {
+    let selectedPlanting = readyPlantings.find(function (planting) {
       return planting.id === selectedPlantingId;
     }) || readyPlantings[0] || null;
     const recentHarvests = getRecentHarvests(state);
     const today = getTodayInputValue();
 
-    if (!selectedPlantingId && selectedPlanting) {
+    if (selectedPlanting && selectedPlanting.id !== selectedPlantingId) {
       selectedPlantingId = selectedPlanting.id;
     }
 
@@ -211,6 +211,10 @@
     });
   }
 
+  function selectPlanting(plantingId) {
+    selectedPlantingId = plantingId || "";
+  }
+
   async function handleSubmit(form) {
     hideFormError();
 
@@ -351,6 +355,7 @@
   }
 
   window.GrowDayHarvestForm = {
-    renderHarvestForm
+    renderHarvestForm,
+    selectPlanting
   };
 })();

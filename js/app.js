@@ -131,6 +131,10 @@
         return;
       }
 
+      if (button.dataset.harvestPlantingId && HarvestForm && typeof HarvestForm.selectPlanting === "function") {
+        HarvestForm.selectPlanting(button.dataset.harvestPlantingId);
+      }
+
       navigateTo(button.dataset.targetView);
     });
   }
