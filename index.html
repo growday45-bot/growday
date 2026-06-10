@@ -5,19 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GrowDay</title>
   <!-- GrowDay ใช้ HTML5 + Tailwind CSS CDN + Vanilla JavaScript เท่านั้น -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <!-- โครงหน้าหลักของเว็บแอพ GrowDay จะถูกเติมตาม UI Flow ในขั้นถัดไป -->
-  <main id="app" class="min-h-screen">
-    <h1>GrowDay</h1>
-  </main>
+<body class="bg-gray-100 text-gray-900 antialiased">
+  <div id="app" class="mx-auto flex min-h-screen w-full max-w-[430px] flex-col bg-gray-50 shadow-sm">
+    <header class="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-4 pb-4 pt-5">
+      <div class="flex items-center gap-3">
+        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-700 text-lg font-bold text-white">
+          GD
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold leading-tight text-green-800">GrowDay</h1>
+          <p class="text-sm text-gray-600">จัดการการปลูกผักไฮโดรโปนิกส์</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="relative flex-1 px-4 pb-28 pt-4">
+      <section
+        id="loading-state"
+        class="mb-4 hidden rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm font-medium text-green-800"
+        role="status"
+        aria-live="polite"
+      >
+        กำลังโหลดข้อมูล...
+      </section>
+
+      <section
+        id="error-message"
+        class="mb-4 hidden rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+        role="alert"
+      >
+        โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่
+      </section>
+
+      <section id="view-dashboard" class="space-y-4" data-view="dashboard">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm font-medium text-green-700">หน้าแรก</p>
+          <h2 class="mt-1 text-xl font-bold text-gray-900">ภาพรวมการปลูก</h2>
+          <p class="mt-2 text-sm text-gray-600">พื้นที่นี้จะแสดงสรุปรายการปลูกและผลผลิตล่าสุด</p>
+        </div>
+      </section>
+
+      <section id="view-planting" class="hidden space-y-4" data-view="planting">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm font-medium text-green-700">ปลูก</p>
+          <h2 class="mt-1 text-xl font-bold text-gray-900">บันทึกการปลูก</h2>
+          <p class="mt-2 text-sm text-gray-600">พื้นที่นี้จะใช้กรอกชนิดผัก จำนวน และวันที่ปลูก</p>
+        </div>
+      </section>
+
+      <section id="view-records" class="hidden space-y-4" data-view="records">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm font-medium text-green-700">รายการปลูก</p>
+          <h2 class="mt-1 text-xl font-bold text-gray-900">ติดตามรายการปลูก</h2>
+          <p class="mt-2 text-sm text-gray-600">พื้นที่นี้จะแสดงรายการปลูกทั้งหมดในรูปแบบการ์ด</p>
+        </div>
+      </section>
+
+      <section id="view-harvest" class="hidden space-y-4" data-view="harvest">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm font-medium text-green-700">เก็บเกี่ยว</p>
+          <h2 class="mt-1 text-xl font-bold text-gray-900">บันทึกเก็บเกี่ยว</h2>
+          <p class="mt-2 text-sm text-gray-600">พื้นที่นี้จะใช้บันทึกวันที่เก็บเกี่ยวจริงและผลผลิต</p>
+        </div>
+      </section>
+
+      <section id="view-summary" class="hidden space-y-4" data-view="summary">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm font-medium text-green-700">สรุป</p>
+          <h2 class="mt-1 text-xl font-bold text-gray-900">สรุปผลผลิต</h2>
+          <p class="mt-2 text-sm text-gray-600">พื้นที่นี้จะแสดงผลผลิตรวมและรายการเก็บเกี่ยวล่าสุด</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-gray-200 bg-white px-3 py-2">
+      <div class="grid grid-cols-4 gap-2">
+        <button type="button" class="nav-button min-h-14 rounded-2xl bg-green-700 px-2 text-sm font-semibold text-white" data-target-view="dashboard" aria-current="page">
+          หน้าแรก
+        </button>
+        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="records">
+          ปลูก
+        </button>
+        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="harvest">
+          เก็บเกี่ยว
+        </button>
+        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="summary">
+          สรุป
+        </button>
+      </div>
+    </nav>
+
+    <div
+      id="toast-message"
+      class="pointer-events-none fixed bottom-24 left-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-[398px] -translate-x-1/2 rounded-2xl bg-green-800 px-4 py-3 text-sm font-medium text-white shadow-lg"
+      role="status"
+      aria-live="polite"
+    >
+      บันทึกข้อมูลเรียบร้อยแล้ว
+    </div>
+  </div>
 
   <script src="js/config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/state.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/utils.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/planting-form.js"></script>
   <script src="js/planting-list.js"></script>
