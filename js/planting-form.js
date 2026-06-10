@@ -45,6 +45,7 @@
                 return `<option value="${escapeHtml(crop.cropId)}">${escapeHtml(crop.cropName)}${crop.thaiName ? " - " + escapeHtml(crop.thaiName) : ""}</option>`;
               }).join("")}
             </select>
+            <p id="planting-crop-id-error" class="field-error hidden"></p>
             ${crops.length ? "" : '<p class="mt-2 text-sm text-yellow-700">ยังไม่มีรายชื่อผัก กรุณาตรวจสอบการเชื่อมต่อข้อมูล</p>'}
           </div>
 
@@ -62,6 +63,7 @@
                 class="mt-2 min-h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-base text-gray-900"
                 ${isLoading ? "disabled" : ""}
               >
+              <p id="planting-quantity-error" class="field-error hidden"></p>
             </div>
 
             <div>
@@ -87,6 +89,7 @@
               class="mt-2 min-h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-base text-gray-900"
               ${isLoading ? "disabled" : ""}
             >
+            <p id="planting-planted-date-error" class="field-error hidden"></p>
             <p class="mt-2 text-xs text-gray-500">หมายถึงวันที่ย้ายต้นกล้าลงราง/ช่องปลูกไฮโดรโปนิกส์</p>
           </div>
 
@@ -150,12 +153,14 @@
 
     document.addEventListener("input", function (event) {
       if (event.target.closest("#planting-form")) {
+        clearFieldError(event.target.id);
         updateExpectedHarvestPreview();
       }
     });
 
     document.addEventListener("change", function (event) {
       if (event.target.closest("#planting-form")) {
+        clearFieldError(event.target.id);
         updateExpectedHarvestPreview();
       }
     });
@@ -164,6 +169,7 @@
       if (event.target.id === "planting-form") {
         window.setTimeout(function () {
           hideFormError();
+          clearFieldErrors();
           setDefaultUnit();
           updateExpectedHarvestPreview();
         }, 0);
@@ -180,12 +186,13 @@
 
   async function handleSubmit(form) {
     hideFormError();
+    clearFieldErrors();
 
     const payload = getPayloadFromForm(form);
     const validationError = validatePayload(payload);
 
     if (validationError) {
-      showFormError(validationError);
+      showFieldError(validationError.field, validationError.message);
       return;
     }
 
@@ -229,18 +236,27 @@
 
   function validatePayload(payload) {
     if (!payload.cropId) {
-      return "กรุณาเลือกชนิดผัก";
+      return {
+        field: "planting-crop-id",
+        message: "กรุณาเลือกชนิดผัก"
+      };
     }
 
     if (!Utils.validatePositiveNumber(payload.quantity)) {
-      return "กรุณาระบุจำนวนที่ปลูกให้ถูกต้อง";
+      return {
+        field: "planting-quantity",
+        message: "กรุณาระบุจำนวนที่ปลูกให้ถูกต้อง"
+      };
     }
 
     if (!payload.plantedDate) {
-      return "กรุณาระบุวันที่ปลูก";
+      return {
+        field: "planting-planted-date",
+        message: "กรุณาระบุวันที่ปลูก"
+      };
     }
 
-    return "";
+    return null;
   }
 
   function updateExpectedHarvestPreview() {
@@ -308,6 +324,48 @@
 
     error.textContent = "";
     error.classList.add("hidden");
+  }
+
+  function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(`${fieldId}-error`);
+
+    if (field) {
+      field.classList.add("border-red-300", "bg-red-50");
+      field.setAttribute("aria-invalid", "true");
+      field.focus();
+    }
+
+    if (error) {
+      error.textContent = message;
+      error.classList.remove("hidden");
+      return;
+    }
+
+    showFormError(message);
+  }
+
+  function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(`${fieldId}-error`);
+
+    if (field) {
+      field.classList.remove("border-red-300", "bg-red-50");
+      field.removeAttribute("aria-invalid");
+    }
+
+    if (error) {
+      error.textContent = "";
+      error.classList.add("hidden");
+    }
+  }
+
+  function clearFieldErrors() {
+    [
+      "planting-crop-id",
+      "planting-quantity",
+      "planting-planted-date"
+    ].forEach(clearFieldError);
   }
 
   function escapeHtml(value) {

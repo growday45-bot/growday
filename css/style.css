@@ -7,10 +7,53 @@ html {
   font-family: "Noto Sans Thai", system-ui, sans-serif;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   min-height: 100vh;
+  overflow-x: hidden;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+#app {
+  overflow-x: hidden;
+}
+
+.field-error {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #b91c1c;
 }
 
 nav {
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+@media (max-width: 360px) {
+  .nav-button {
+    font-size: 0.75rem;
+  }
 }

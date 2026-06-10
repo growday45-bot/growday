@@ -25,7 +25,7 @@
       </div>
     </header>
 
-    <main class="relative flex-1 px-4 pb-28 pt-4">
+    <main class="relative flex-1 px-4 pb-32 pt-4">
       <section
         id="loading-state"
         class="mb-4 hidden rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm font-medium text-green-800"
@@ -84,18 +84,18 @@
       </section>
     </main>
 
-    <nav class="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-gray-200 bg-white px-3 py-2">
+    <nav class="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-gray-200 bg-white px-3 py-2 shadow-[0_-8px_24px_rgba(15,23,42,0.08)]" aria-label="เมนูหลัก">
       <div class="grid grid-cols-4 gap-2">
-        <button type="button" class="nav-button min-h-14 rounded-2xl bg-green-700 px-2 text-sm font-semibold text-white" data-target-view="dashboard" aria-current="page">
+        <button type="button" class="nav-button min-h-16 rounded-2xl bg-green-700 px-2 text-sm font-semibold leading-tight text-white" data-target-view="dashboard" aria-current="page">
           หน้าแรก
         </button>
-        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="records">
+        <button type="button" class="nav-button min-h-16 rounded-2xl bg-green-50 px-2 text-sm font-semibold leading-tight text-green-800" data-target-view="records">
           ปลูก
         </button>
-        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="harvest">
+        <button type="button" class="nav-button min-h-16 rounded-2xl bg-green-50 px-2 text-sm font-semibold leading-tight text-green-800" data-target-view="harvest">
           เก็บเกี่ยว
         </button>
-        <button type="button" class="nav-button min-h-14 rounded-2xl px-2 text-sm font-semibold text-gray-600" data-target-view="summary">
+        <button type="button" class="nav-button min-h-16 rounded-2xl bg-green-50 px-2 text-sm font-semibold leading-tight text-green-800" data-target-view="summary">
           สรุป
         </button>
       </div>
@@ -103,7 +103,7 @@
 
     <div
       id="toast-message"
-      class="pointer-events-none fixed bottom-24 left-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-[398px] -translate-x-1/2 rounded-2xl bg-green-800 px-4 py-3 text-sm font-medium text-white shadow-lg"
+      class="pointer-events-none fixed bottom-28 left-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-[398px] -translate-x-1/2 rounded-2xl bg-green-800 px-4 py-3 text-center text-sm font-medium leading-6 text-white shadow-lg"
       role="status"
       aria-live="polite"
     >

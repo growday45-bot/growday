@@ -94,7 +94,7 @@
           return `
             <button
               type="button"
-              class="planting-filter-chip min-h-10 shrink-0 rounded-full border px-4 text-sm font-semibold ${className}"
+              class="planting-filter-chip min-h-11 shrink-0 rounded-full border px-4 text-sm font-semibold ${className}"
               data-filter-status="${filter.value}"
             >
               ${filter.label}
@@ -114,7 +114,7 @@
       : "border border-green-200 bg-green-50 text-green-800";
 
     return `
-      <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h3 class="text-lg font-bold text-gray-900">${escapeHtml(planting.cropName || "-")}</h3>
@@ -147,7 +147,7 @@
         <div class="mt-4 grid grid-cols-2 gap-3">
           <button
             type="button"
-            class="min-h-11 rounded-2xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700"
+            class="min-h-12 rounded-2xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700"
             data-edit-planting-id="${escapeHtml(planting.id || "")}"
           >
             แก้ไข
@@ -155,7 +155,7 @@
           ${showHarvestButton ? `
             <button
               type="button"
-              class="min-h-11 rounded-2xl px-3 text-sm font-semibold ${harvestButtonClass}"
+              class="min-h-12 rounded-2xl px-3 text-sm font-semibold ${harvestButtonClass}"
               data-harvest-planting-id="${escapeHtml(planting.id || "")}"
               data-target-view="harvest"
             >
@@ -164,7 +164,7 @@
           ` : `
             <button
               type="button"
-              class="min-h-11 rounded-2xl bg-gray-100 px-3 text-sm font-semibold text-gray-500"
+              class="min-h-12 rounded-2xl bg-gray-100 px-3 text-sm font-semibold text-gray-500"
               disabled
             >
               เก็บเกี่ยว

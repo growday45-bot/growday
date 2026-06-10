@@ -54,6 +54,7 @@
                 return `<option value="${escapeHtml(planting.id)}" ${selected}>${escapeHtml(planting.cropName || "-")} • ปลูก ${Utils.formatDateForDisplay(planting.plantedDate)}</option>`;
               }).join("") : '<option value="">ยังไม่มีรายการพร้อมเก็บ</option>'}
             </select>
+            <p id="harvest-planting-id-error" class="field-error hidden"></p>
           </div>
 
           ${selectedPlanting ? renderPlantingInfo(selectedPlanting) : renderNoReadyPlantings()}
@@ -68,6 +69,7 @@
               class="mt-2 min-h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-base text-gray-900"
               ${readyPlantings.length ? "" : "disabled"}
             >
+            <p id="harvest-date-error" class="field-error hidden"></p>
           </div>
 
           <div>
@@ -83,6 +85,7 @@
               class="mt-2 min-h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-base text-gray-900"
               ${readyPlantings.length ? "" : "disabled"}
             >
+            <p id="harvest-yield-amount-error" class="field-error hidden"></p>
           </div>
 
           <div>
@@ -198,8 +201,13 @@
 
     document.addEventListener("change", function (event) {
       if (event.target.id === "harvest-planting-id") {
+        clearFieldError(event.target.id);
         selectedPlantingId = event.target.value;
         renderHarvestForm(State.getState());
+      }
+
+      if (event.target.closest("#harvest-form")) {
+        clearFieldError(event.target.id);
       }
     });
 
@@ -207,6 +215,12 @@
       if (event.target.id === "harvest-form") {
         event.preventDefault();
         handleSubmit(event.target);
+      }
+    });
+
+    document.addEventListener("input", function (event) {
+      if (event.target.closest("#harvest-form")) {
+        clearFieldError(event.target.id);
       }
     });
   }
@@ -217,12 +231,13 @@
 
   async function handleSubmit(form) {
     hideFormError();
+    clearFieldErrors();
 
     const payload = getPayloadFromForm(form);
     const validationError = validatePayload(payload);
 
     if (validationError) {
-      showFormError(validationError);
+      showFieldError(validationError.field, validationError.message);
       return;
     }
 
@@ -265,18 +280,27 @@
 
   function validatePayload(payload) {
     if (!payload.plantingId) {
-      return "กรุณาเลือกรายการปลูก";
+      return {
+        field: "harvest-planting-id",
+        message: "กรุณาเลือกรายการปลูก"
+      };
     }
 
     if (!payload.harvestDate) {
-      return "กรุณาระบุวันที่เก็บเกี่ยว";
+      return {
+        field: "harvest-date",
+        message: "กรุณาระบุวันที่เก็บเกี่ยว"
+      };
     }
 
     if (!Utils.validatePositiveNumber(payload.yieldAmount)) {
-      return "กรุณาระบุปริมาณผลผลิตให้ถูกต้อง";
+      return {
+        field: "harvest-yield-amount",
+        message: "กรุณาระบุปริมาณผลผลิตให้ถูกต้อง"
+      };
     }
 
-    return "";
+    return null;
   }
 
   function getReadyPlantings(state) {
@@ -343,6 +367,48 @@
 
     error.textContent = "";
     error.classList.add("hidden");
+  }
+
+  function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(`${fieldId}-error`);
+
+    if (field) {
+      field.classList.add("border-red-300", "bg-red-50");
+      field.setAttribute("aria-invalid", "true");
+      field.focus();
+    }
+
+    if (error) {
+      error.textContent = message;
+      error.classList.remove("hidden");
+      return;
+    }
+
+    showFormError(message);
+  }
+
+  function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(`${fieldId}-error`);
+
+    if (field) {
+      field.classList.remove("border-red-300", "bg-red-50");
+      field.removeAttribute("aria-invalid");
+    }
+
+    if (error) {
+      error.textContent = "";
+      error.classList.add("hidden");
+    }
+  }
+
+  function clearFieldErrors() {
+    [
+      "harvest-planting-id",
+      "harvest-date",
+      "harvest-yield-amount"
+    ].forEach(clearFieldError);
   }
 
   function escapeHtml(value) {

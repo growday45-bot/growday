@@ -179,8 +179,9 @@
       const isActive = target === currentTab || isPlantingArea;
 
       button.classList.toggle("bg-green-700", isActive);
+      button.classList.toggle("bg-green-50", !isActive);
       button.classList.toggle("text-white", isActive);
-      button.classList.toggle("text-gray-600", !isActive);
+      button.classList.toggle("text-green-800", !isActive);
 
       if (isActive) {
         button.setAttribute("aria-current", "page");
