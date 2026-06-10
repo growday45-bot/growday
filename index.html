@@ -15,8 +15,14 @@
   <div id="app" class="mx-auto flex min-h-screen w-full max-w-[430px] flex-col shadow-sm">
     <header class="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-4 pb-4 pt-5">
       <div class="flex items-center gap-3">
-        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-700 text-lg font-bold text-white shadow-sm">
-          GD
+        <div class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm">
+          <img
+            src="assets/images/logo-growday.png"
+            alt="GrowDay"
+            class="h-10 w-10 rounded-xl object-contain"
+            onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');"
+          >
+          <span class="hidden text-lg font-bold text-green-800">GD</span>
         </div>
         <div>
           <h1 class="text-2xl font-bold leading-tight text-green-800">GrowDay</h1>
